@@ -1,17 +1,11 @@
 # Accuknox Django Trainee Assignment
 
-## Overview
+This repository contains solutions for the Django trainee assignment.
 
-This project contains solutions for:
+The assignment covers:
 
-1. Django Signals behavior analysis
+1. Django Signals
 2. Custom iterable Rectangle class in Python
-
-The project experimentally demonstrates:
-
-- Whether Django signals execute synchronously or asynchronously
-- Whether Django signals run in the same thread as the caller
-- Whether Django signals run in the same database transaction as the caller
 
 ---
 
@@ -32,41 +26,39 @@ accuknox_django/
 
 # Setup Instructions
 
-## Clone Repository
+## Clone the repository
 
 ```bash
 git clone <repository_url>
 cd accuknox_django
 ```
 
-## Create Virtual Environment
+## Create virtual environment
 
 ```bash
 python -m venv venv
 ```
 
-## Activate Virtual Environment
-
-### Windows
+## Activate virtual environment (Windows)
 
 ```bash
 .\venv\Scripts\activate
 ```
 
-## Install Dependencies
+## Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## Run Migrations
+## Run migrations
 
 ```bash
 python manage.py makemigrations
 python manage.py migrate
 ```
 
-## Run Server
+## Start development server
 
 ```bash
 python manage.py runserver
@@ -74,74 +66,57 @@ python manage.py runserver
 
 ---
 
-# Django Signals Questions
+# Django Signals
 
-## Question 1
+## Question 1  
+### By default, are Django signals executed synchronously or asynchronously?
 
-### Are Django signals synchronous or asynchronous by default?
+Django signals are executed synchronously by default.
 
-### Conclusion
+To verify this, a `time.sleep(5)` delay was added inside the signal handler.
 
-Django signals execute synchronously by default.
+The request took around 5 seconds to complete, which shows that the caller waits for the signal execution to finish.
 
-### Proof
-
-A `time.sleep(5)` delay was added inside the signal handler.
-
-The request execution waited until the signal completed execution.
-
-### Observed Output
+### Output
 
 ```text
 Total Time Taken: 5.01 seconds
 ```
 
-This proves that the caller waits for the signal execution to complete.
-
 ---
 
-## Question 2
-
+## Question 2  
 ### Do Django signals run in the same thread as the caller?
 
-### Conclusion
+Yes. By default, Django signals run in the same thread as the caller.
 
-Yes, Django signals run in the same thread as the caller by default.
-
-### Proof
-
-Thread IDs were printed from:
-- the caller
+Thread IDs were printed from both:
+- the view
 - the signal handler
 
-### Observed Output
+Both IDs were identical.
+
+### Output
 
 ```text
 Caller Thread ID: 18356
 Signal Thread ID: 18356
 ```
 
-Both thread IDs were identical.
-
 ---
 
-## Question 3
-
+## Question 3  
 ### Do Django signals run in the same database transaction as the caller?
 
-### Conclusion
+Yes.
 
-Yes, Django signals run in the same database transaction as the caller by default.
+The database operation was wrapped inside `transaction.atomic()`.
 
-### Proof
-
-Inside the signal handler:
-- a database record was created
+Inside the signal:
+- a new database entry was created
 - an exception was raised intentionally
 
-The caller operation was wrapped inside `transaction.atomic()`.
-
-Even though both database operations executed before the exception, both records were rolled back.
+After the exception, both database operations were rolled back.
 
 ### Final Database State
 
@@ -150,24 +125,16 @@ Even though both database operations executed before the exception, both records
 <QuerySet []>
 ```
 
-This confirms that both operations were part of the same database transaction.
+This confirms that both operations were part of the same transaction.
 
 ---
 
 # Rectangle Iterator Problem
 
-## Requirement
-
-The Rectangle class:
-- accepts length and width during initialization
-- supports iteration
-- returns:
-  - `{'length': value}`
-  - `{'width': value}`
-
-## Implementation
-
-The iterator protocol was implemented using the `__iter__()` method and `yield`.
+The `Rectangle` class:
+- accepts `length` and `width`
+- supports iteration using `__iter__()`
+- returns length first and width second
 
 ## Example
 
@@ -195,8 +162,7 @@ python manage.py test
 
 ---
 
-# Technologies Used
+# Tech Stack
 
 - Python 3.13
-- Django 5.x
-- SQLite
+- Django 6.x
