@@ -82,12 +82,8 @@ The request took around 5 seconds to complete, which shows that the caller waits
 ### Observed Output
 
 ```text
-Total Time Taken: 5.01 seconds
+Total Time Taken: ~5.01 seconds
 ```
-
-### Screenshot
-
-![Signal Sync Proof](screenshots/signal-sync.png)
 
 ---
 
@@ -112,7 +108,7 @@ Signal Thread ID: 18356
 
 ### Screenshot
 
-![Signal Thread Proof](screenshots/signal-thread.png)
+![Signal Thread Proof](screenshots/signal-transaction.png)
 
 ---
 
@@ -170,7 +166,7 @@ for item in rect:
 
 ### Screenshot
 
-![Rectangle Output](screenshots/rectangle-output.png)
+![Rectangle Output](screenshots/rectangle.png)
 
 ---
 
