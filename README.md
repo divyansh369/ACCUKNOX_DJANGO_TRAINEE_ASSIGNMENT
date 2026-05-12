@@ -2,9 +2,9 @@
 
 This repository contains solutions for the Django trainee assignment.
 
-The assignment covers:
+The assignment includes:
 
-1. Django Signals
+1. Django Signals behavior analysis
 2. Custom iterable Rectangle class in Python
 
 ---
@@ -17,6 +17,7 @@ accuknox_django/
 ├── core/
 ├── signals_demo/
 ├── rectangle_app/
+├── screenshots/
 ├── manage.py
 ├── requirements.txt
 └── README.md
@@ -26,39 +27,39 @@ accuknox_django/
 
 # Setup Instructions
 
-## Clone the repository
+## Clone Repository
 
 ```bash
 git clone <repository_url>
 cd accuknox_django
 ```
 
-## Create virtual environment
+## Create Virtual Environment
 
 ```bash
 python -m venv venv
 ```
 
-## Activate virtual environment (Windows)
+## Activate Virtual Environment (Windows)
 
 ```bash
 .\venv\Scripts\activate
 ```
 
-## Install dependencies
+## Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## Run migrations
+## Run Migrations
 
 ```bash
 python manage.py makemigrations
 python manage.py migrate
 ```
 
-## Start development server
+## Start Server
 
 ```bash
 python manage.py runserver
@@ -68,55 +69,66 @@ python manage.py runserver
 
 # Django Signals
 
-## Question 1  
+## Question 1
+
 ### By default, are Django signals executed synchronously or asynchronously?
 
-Django signals are executed synchronously by default.
+Django signals execute synchronously by default.
 
 To verify this, a `time.sleep(5)` delay was added inside the signal handler.
 
 The request took around 5 seconds to complete, which shows that the caller waits for the signal execution to finish.
 
-### Output
+### Observed Output
 
 ```text
 Total Time Taken: 5.01 seconds
 ```
 
+### Screenshot
+
+![Signal Sync Proof](screenshots/signal-sync.png)
+
 ---
 
-## Question 2  
+## Question 2
+
 ### Do Django signals run in the same thread as the caller?
 
-Yes. By default, Django signals run in the same thread as the caller.
+Yes. Django signals run in the same thread as the caller by default.
 
-Thread IDs were printed from both:
-- the view
+Thread IDs were printed from:
+- the caller
 - the signal handler
 
-Both IDs were identical.
+Both thread IDs were identical.
 
-### Output
+### Observed Output
 
 ```text
 Caller Thread ID: 18356
 Signal Thread ID: 18356
 ```
 
+### Screenshot
+
+![Signal Thread Proof](screenshots/signal-thread.png)
+
 ---
 
-## Question 3  
+## Question 3
+
 ### Do Django signals run in the same database transaction as the caller?
 
 Yes.
 
 The database operation was wrapped inside `transaction.atomic()`.
 
-Inside the signal:
-- a new database entry was created
+Inside the signal handler:
+- a new database record was created
 - an exception was raised intentionally
 
-After the exception, both database operations were rolled back.
+After the exception, both database operations were rolled back successfully.
 
 ### Final Database State
 
@@ -125,7 +137,11 @@ After the exception, both database operations were rolled back.
 <QuerySet []>
 ```
 
-This confirms that both operations were part of the same transaction.
+### Screenshot
+
+![Signal Transaction Proof](screenshots/signal-transaction.png)
+
+This confirms that both operations were part of the same database transaction.
 
 ---
 
@@ -152,6 +168,10 @@ for item in rect:
 {'width': 5}
 ```
 
+### Screenshot
+
+![Rectangle Output](screenshots/rectangle-output.png)
+
 ---
 
 # Running Tests
@@ -165,4 +185,5 @@ python manage.py test
 # Tech Stack
 
 - Python 3.13
-- Django 6.x
+- Django 5.x
+- SQLite
